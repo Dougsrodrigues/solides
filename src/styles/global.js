@@ -10,15 +10,13 @@ export default createGlobalStyle`
   body{
     -webkit-font-smoothing: antialiased;
     height: 100vh;
+    background: #f2f2f2;
   }
   body , input, button{
-    /* font-family:Nunito ,sans-serif; */
+    font-family:'Montserrat' ,sans-serif;
     font-size:16px;
   }
-  #root{
-    max-width:100vw;
-    margin: 0 auto;
-  }
+
   button{
     cursor: pointer;
   }

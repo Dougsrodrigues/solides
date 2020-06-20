@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 import { FiMail, FiLock } from 'react-icons/fi';
+import { useDispatch } from 'react-redux';
 
 import firebase from '../../services/firebase';
 import { Container, FormContent, Background } from './styles';
@@ -10,18 +11,27 @@ import Button from '../../components/commom/Button';
 import Logo from '../../assets/logo.svg';
 import signInSchema from './ValidationSchema';
 
-export default function SignIn() {
+export default function SignIn(props) {
+  const dispatchSignIn = useDispatch();
+
   const handleSignIn = async (values) => {
     const { email, password } = values;
     try {
       const res = await firebase.signIn(email, password);
 
-      console.log(res);
+      const data = {
+        name: res.user.displayName,
+        email: res.user.email,
+        token: res.user.refreshToken,
+      };
+
+      dispatchSignIn({ type: 'SIGN_IN', data });
+      props.history.push('/dashboard');
     } catch (err) {
       alert('deu ruim pae');
     }
-    console.log(values);
   };
+
   return (
     <Container>
       <FormContent>
@@ -38,7 +48,7 @@ export default function SignIn() {
             }, 1000);
           }}
         >
-          {({ handleSubmit, values, errors }) => (
+          {({ handleSubmit, errors }) => (
             <Form onSubmit={handleSubmit}>
               <Input
                 type="text"

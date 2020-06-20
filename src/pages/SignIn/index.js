@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 import { FiMail, FiLock } from 'react-icons/fi';
 
+import firebase from '../../services/firebase';
 import { Container, FormContent, Background } from './styles';
 import Input from '../../components/commom/Input';
 import Button from '../../components/commom/Button';
@@ -10,6 +11,17 @@ import Logo from '../../assets/logo.svg';
 import signInSchema from './ValidationSchema';
 
 export default function SignIn() {
+  const handleSignIn = async (values) => {
+    const { email, password } = values;
+    try {
+      const res = await firebase.signIn(email, password);
+
+      console.log(res);
+    } catch (err) {
+      alert('deu ruim pae');
+    }
+    console.log(values);
+  };
   return (
     <Container>
       <FormContent>
@@ -21,7 +33,7 @@ export default function SignIn() {
           validationSchema={signInSchema}
           onSubmit={(values, actions) => {
             setTimeout(() => {
-              alert(JSON.stringify(values, null, 2));
+              handleSignIn(values);
               actions.setSubmitting(false);
             }, 1000);
           }}

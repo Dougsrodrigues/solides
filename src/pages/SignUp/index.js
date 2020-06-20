@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 import { FiMail, FiLock, FiUser } from 'react-icons/fi';
 
+import firebase from '../../services/firebase';
 import { Container, FormContent, Background } from './styles';
 import Input from '../../components/commom/Input';
 import Button from '../../components/commom/Button';
@@ -11,6 +12,17 @@ import signUpSchema from './ValidationSchema';
 import Logo from '../../assets/logo.svg';
 
 export default function SignUp() {
+  const handleRegisterUser = async (values) => {
+    const { name, email, password } = values;
+    try {
+      await firebase.register(name, email, password);
+
+      alert('usuario registrado');
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
   return (
     <Container>
       <FormContent>
@@ -22,7 +34,7 @@ export default function SignUp() {
           validationSchema={signUpSchema}
           onSubmit={(values, actions) => {
             setTimeout(() => {
-              alert(JSON.stringify(values, null, 2));
+              handleRegisterUser(values);
               actions.setSubmitting(false);
             }, 1000);
           }}

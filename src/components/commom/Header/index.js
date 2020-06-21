@@ -1,23 +1,24 @@
 import React, { memo, useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { FiPower } from 'react-icons/fi';
-import storage from 'redux-persist/lib/storage';
+import { useDispatch } from 'react-redux';
 import firebase from '../../../services/firebase';
 
 import { Container, Header, HeaderContent, NavHeader } from './styles';
 import logoSvg from '../../../assets/logo.svg';
 
 function HeaderComponent() {
+  const dispatchSignIn = useDispatch();
   const [logOut, setLogOut] = useState(false);
   const signOut = () => {
     firebase.logout();
-    storage.removeItem('persist:@PoisPontoUser');
+    dispatchSignIn({ type: 'SIGN_OUT' });
     setLogOut(true);
   };
 
   return (
     <>
-      {logOut && <Redirect to="/" />}
+      {logOut && <Redirect to={{ pathname: '/' }} />}
       <Container>
         <Header>
           <HeaderContent>

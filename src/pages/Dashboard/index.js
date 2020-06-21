@@ -2,6 +2,7 @@ import React from 'react';
 import { FiUser, FiLock } from 'react-icons/fi';
 import { Formik, Form } from 'formik';
 import { useSelector } from 'react-redux';
+import moment from 'moment';
 
 import registroPontoSchema from './ValidationSchema';
 import { Container, Content } from './styles';
@@ -13,17 +14,20 @@ import api from '../../services/api';
 export default function Dashboard() {
   const { userInfo } = useSelector((state) => state.signIn);
 
-  const handleHitPoint = async () => {
+  const handleHitPoint = async (values) => {
     const { token } = userInfo.data;
+    const currentDate = new Date();
+    const monthAndYearDate = moment(currentDate).format('YYYY-MM');
+    debugger;
 
-    try {
-      const res = await api.get(`/datasBatidaPonto.json?auth=${token}`);
+    // try {
+    //   const res = await api.get(`/datasBatidaPonto.json?auth=${token}`);
 
-      // console.log(res.data);
-      console.log(new Date());
-    } catch (err) {
-      alert(err.message);
-    }
+    //   // console.log(res.data);
+    //   console.log(new Date());
+    // } catch (err) {
+    //   alert(err.message);
+    // }
   };
 
   return (

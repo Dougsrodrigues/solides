@@ -23,6 +23,10 @@ class Firebase {
     return this.auth.signInWithEmailAndPassword(email, password);
   }
 
+  getIdToken() {
+    return this.auth.currentUser.getIdToken();
+  }
+
   logout() {
     return this.auth.signOut();
   }

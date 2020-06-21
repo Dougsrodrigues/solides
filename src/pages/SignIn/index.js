@@ -18,11 +18,12 @@ export default function SignIn(props) {
     const { email, password } = values;
     try {
       const res = await firebase.signIn(email, password);
+      const token = await firebase.getIdToken();
 
       const data = {
         name: res.user.displayName,
         email: res.user.email,
-        token: res.user.refreshToken,
+        token,
       };
 
       dispatchSignIn({ type: 'SIGN_IN', data });

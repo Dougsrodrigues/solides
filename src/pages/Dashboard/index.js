@@ -1,73 +1,98 @@
-import React from 'react';
-import { FiUser, FiLock } from 'react-icons/fi';
-import { Formik, Form } from 'formik';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import moment from 'moment';
 
-import registroPontoSchema from './ValidationSchema';
-import { Container, Content } from './styles';
+import { Container, Content, ContainerContent, HourContent } from './styles';
 import Header from '../../components/commom/Header';
-import Input from '../../components/commom/Input';
 import Button from '../../components/commom/Button';
 import api from '../../services/api';
 
 export default function Dashboard() {
   const { userInfo } = useSelector((state) => state.signIn);
+  const [currentDateHours, setCurrentDateHours] = useState([]);
 
-  const handleHitPoint = async (values) => {
+  const getHoursCurrentDate = async () => {
+    if (userInfo.data) {
+      const { token } = userInfo.data;
+      const currentDate = new Date();
+      const monthAndYearDate = moment(currentDate).format('DD-MM-YYYY');
+
+      try {
+        const res = await api.get(
+          `datasBatidas/${monthAndYearDate}/batidas.json?auth=${token}`
+        );
+        if (res.data === null) {
+          res.data = {};
+        }
+        setCurrentDateHours(Object.values(res.data));
+      } catch (err) {
+        alert(err.message);
+      }
+    }
+  };
+
+  const handleHitPoint = async () => {
     const { token } = userInfo.data;
     const currentDate = new Date();
-    const monthAndYearDate = moment(currentDate).format('YYYY-MM');
-    debugger;
+    const monthAndYearDate = moment(currentDate).format('DD-MM-YYYY');
+    const hourDate = moment(currentDate).format('HH:mm');
 
-    // try {
-    //   const res = await api.get(`/datasBatidaPonto.json?auth=${token}`);
+    try {
+      const hours = currentDateHours;
 
-    //   // console.log(res.data);
-    //   console.log(new Date());
-    // } catch (err) {
-    //   alert(err.message);
-    // }
+      if (hours.length > 0) {
+        const sameHour = hours.find((hour) => hour === hourDate);
+
+        if (sameHour) {
+          alert('Não é possivel cadastrar horarios duplicados');
+          return;
+        }
+        hours.push(hourDate);
+
+        await api.put(
+          `datasBatidas/${monthAndYearDate}/batidas.json?auth=${token}`,
+          hours
+        );
+        getHoursCurrentDate();
+        return;
+      }
+
+      // Aqui era pra ser um POST, porem não consegui achar um jeito que ficasse bacana
+      // o retorno dos dados, na hora de salvar com Firebase,
+      // porém deixei a logica de como seria, caso fosse um POST.
+      hours.push(hourDate);
+      await api.put(
+        `datasBatidas/${monthAndYearDate}/batidas.json?auth=${token}`,
+        hours
+      );
+      getHoursCurrentDate();
+    } catch (err) {
+      alert(err.message);
+    }
   };
+
+  useEffect(() => {
+    getHoursCurrentDate();
+  }, [userInfo]);
 
   return (
     <>
       <Container>
         <Header />
-        <Content>
-          <Formik
-            initialValues={{ matricula: '', password: '' }}
-            // validationSchema={registroPontoSchema}
-            onSubmit={(values, actions) => {
-              setTimeout(() => {
-                handleHitPoint(values);
-                actions.setSubmitting(false);
-              }, 1000);
-            }}
-          >
-            {({ handleSubmit, values, errors }) => (
-              <Form onSubmit={handleSubmit}>
-                <h1>Olá, Douglas</h1>
-                <Input
-                  type="text"
-                  name="matricula"
-                  placeholder="Matricula:"
-                  // error={errors.email}
-                  icon={FiUser}
-                />
-                <Input
-                  type="password"
-                  name="password"
-                  placeholder="Password:"
-                  // error={errors.password}
-                  icon={FiLock}
-                />
+        <ContainerContent>
+          <Content>
+            <div>
+              <h1>Olá, Douglas.</h1>
+              <h3>21/06/2020</h3>
+            </div>
 
-                <Button type="submit" textButton="Registrar ponto" />
-              </Form>
-            )}
-          </Formik>
-        </Content>
+            <HourContent>
+              {currentDateHours &&
+                currentDateHours.map((hour) => <li key={hour}>{hour}</li>)}
+            </HourContent>
+            <Button textButton="Registrar ponto" onClick={handleHitPoint} />
+          </Content>
+        </ContainerContent>
       </Container>
     </>
   );

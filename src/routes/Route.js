@@ -10,8 +10,6 @@ export default function ReactDOMRoute({
 }) {
   const { userInfo } = useSelector((state) => state.signIn);
 
-  console.log(userInfo);
-
   return (
     <Route
       // eslint-disable-next-line react/jsx-props-no-spreading

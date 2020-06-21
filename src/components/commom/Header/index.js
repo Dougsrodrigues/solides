@@ -8,11 +8,11 @@ import { Container, Header, HeaderContent, NavHeader } from './styles';
 import logoSvg from '../../../assets/logo.svg';
 
 function HeaderComponent() {
-  const dispatchSignIn = useDispatch();
+  const dispatchSignOut = useDispatch();
   const [logOut, setLogOut] = useState(false);
   const signOut = () => {
     firebase.logout();
-    dispatchSignIn({ type: 'SIGN_OUT' });
+    dispatchSignOut({ type: 'SIGN_OUT' });
     setLogOut(true);
   };
 

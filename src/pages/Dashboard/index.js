@@ -2,19 +2,20 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import moment from 'moment';
 
-import { Container, Content, ContainerContent, HourContent } from './styles';
+import { Content, Container, HourContent, Item } from './styles';
 import Header from '../../components/commom/Header';
 import Button from '../../components/commom/Button';
 import api from '../../services/api';
 
 export default function Dashboard() {
   const { userInfo } = useSelector((state) => state.signIn);
+  const [currentDate, setCurrentDate] = useState([]);
   const [currentDateHours, setCurrentDateHours] = useState([]);
 
   const getHoursCurrentDate = async () => {
     if (userInfo.data) {
       const { token } = userInfo.data;
-      const currentDate = new Date();
+
       const monthAndYearDate = moment(currentDate).format('DD-MM-YYYY');
 
       try {
@@ -31,10 +32,14 @@ export default function Dashboard() {
     }
   };
 
+  const getCurrentDateInfo = () => {
+    setCurrentDate(new Date());
+  };
+
   const handleHitPoint = async () => {
     const { token } = userInfo.data;
-    const currentDate = new Date();
-    const monthAndYearDate = moment(currentDate).format('DD-MM-YYYY');
+
+    const formatCurrentDay = moment(currentDate).format('DD-MM-YYYY');
     const hourDate = moment(currentDate).format('HH:mm');
 
     try {
@@ -50,7 +55,7 @@ export default function Dashboard() {
         hours.push(hourDate);
 
         await api.put(
-          `datasBatidas/${monthAndYearDate}/batidas.json?auth=${token}`,
+          `datasBatidas/${formatCurrentDay}/batidas.json?auth=${token}`,
           hours
         );
         getHoursCurrentDate();
@@ -62,7 +67,7 @@ export default function Dashboard() {
       // porém deixei a logica de como seria, caso fosse um POST.
       hours.push(hourDate);
       await api.put(
-        `datasBatidas/${monthAndYearDate}/batidas.json?auth=${token}`,
+        `datasBatidas/${formatCurrentDay}/batidas.json?auth=${token}`,
         hours
       );
       getHoursCurrentDate();
@@ -72,27 +77,28 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
+    getCurrentDateInfo();
+  }, []);
+
+  useEffect(() => {
     getHoursCurrentDate();
   }, [userInfo]);
 
   return (
     <>
+      <Header />
       <Container>
-        <Header />
-        <ContainerContent>
-          <Content>
-            <div>
-              <h1>Olá, Douglas.</h1>
-              <h3>21/06/2020</h3>
-            </div>
-
-            <HourContent>
-              {currentDateHours &&
-                currentDateHours.map((hour) => <li key={hour}>{hour}</li>)}
-            </HourContent>
-            <Button textButton="Registrar ponto" onClick={handleHitPoint} />
-          </Content>
-        </ContainerContent>
+        <Content>
+          <div>
+            <h1>Olá, {userInfo.data ? userInfo.data.name : ''}</h1>
+            <h3>{moment(currentDate).format('DD/MM/YYYY')}</h3>
+          </div>
+          <HourContent md={6}>
+            {currentDateHours &&
+              currentDateHours.map((hour) => <Item key={hour}>{hour}</Item>)}
+          </HourContent>
+          <Button textButton="Registrar ponto" onClick={handleHitPoint} />
+        </Content>
       </Container>
     </>
   );

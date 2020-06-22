@@ -6,6 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { store, persistor } from './store';
 import Routes from './routes';
 import GlobalStyles from './styles/global';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (

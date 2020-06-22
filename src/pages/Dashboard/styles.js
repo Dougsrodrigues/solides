@@ -1,54 +1,48 @@
 import styled from 'styled-components';
+import { Row, Col, Container as BootstrapContainer } from 'react-bootstrap';
 
 export const Container = styled.div`
-  height: 100vh;
-`;
-
-export const ContainerContent = styled.div`
   display: flex;
-  margin: 0 auto;
   align-items: center;
   justify-content: center;
-  height: calc(100% - 124px);
+  margin: 0 auto;
   width: 100%;
   max-width: 960px;
+  height: calc(100vh - 124px);
+  border-radius: 5px;
 `;
-
-export const Content = styled.div`
-  background: #fff;
+export const Content = styled(BootstrapContainer)`
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  border-radius: 5px;
+  align-items: center;
   width: 100%;
-  max-width: 650px;
   height: 300px;
+  max-width: 650px;
+  background: white;
+  border-radius: 5px;
 
-  div {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 5px;
+  > div {
+    h1,
+    h3 {
+      text-align: center;
+    }
   }
 `;
 
-export const HourContent = styled.ul`
-  margin: 0px 10px 10px 0px;
+export const HourContent = styled(Row)`
+  width: 300px;
+`;
+export const Item = styled(Col)`
   display: flex;
-  width: 100%;
-  max-width: 300px;
+  flex-direction: column;
   justify-content: center;
-
-  list-style-type: none;
-  text-decoration: none;
-  li {
-    border-radius: 50%;
-    padding: 10px;
-    background: #ccc;
-    & + li {
-      margin-left: 3px;
-    }
-  }
+  align-items: center;
+  width: 45px;
+  height: 45px;
+  padding: 28px;
+  border-radius: 50%;
+  background: #c9c9c9;
+  margin: 0px 0px 5px 10px;
+  font-weight: bold;
 `;

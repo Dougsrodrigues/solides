@@ -14,9 +14,9 @@ export default function Button(props) {
 Button.propTypes = {
   textButton: PropTypes.string.isRequired,
   type: PropTypes.string,
-  onClick: PropTypes.oneOf([PropTypes.func]),
+  onClick: PropTypes.func,
 };
 Button.defaultProps = {
   type: 'button',
-  onClick: PropTypes.oneOf([PropTypes.func]),
+  onClick: PropTypes.func,
 };

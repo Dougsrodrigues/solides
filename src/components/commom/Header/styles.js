@@ -15,6 +15,7 @@ export const HeaderContent = styled.div`
 
   img {
     height: 60px;
+    margin-right: 30px;
   }
   button {
     background: transparent;

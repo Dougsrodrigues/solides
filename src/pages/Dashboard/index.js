@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import moment from 'moment';
+import { toast } from 'react-toastify';
 
 import { Content, Container, HourContent, Item } from './styles';
 import Header from '../../components/commom/Header';
@@ -9,10 +10,12 @@ import api from '../../services/api';
 
 export default function Dashboard() {
   const { userInfo } = useSelector((state) => state.signIn);
-  const [currentDate, setCurrentDate] = useState([]);
+  const [currentDay, setCurrentDay] = useState('');
   const [currentDateHours, setCurrentDateHours] = useState([]);
 
   const getHoursCurrentDate = async () => {
+    const currentDate = new Date();
+    setCurrentDay(moment(currentDate).format('DD/MM/YYYY'));
     if (userInfo.data) {
       const { token } = userInfo.data;
 
@@ -27,18 +30,14 @@ export default function Dashboard() {
         }
         setCurrentDateHours(Object.values(res.data));
       } catch (err) {
-        alert(err.message);
+        toast.error(err.message);
       }
     }
   };
 
-  const getCurrentDateInfo = () => {
-    setCurrentDate(new Date());
-  };
-
   const handleHitPoint = async () => {
     const { token } = userInfo.data;
-
+    const currentDate = new Date();
     const formatCurrentDay = moment(currentDate).format('DD-MM-YYYY');
     const hourDate = moment(currentDate).format('HH:mm');
 
@@ -49,7 +48,7 @@ export default function Dashboard() {
         const sameHour = hours.find((hour) => hour === hourDate);
 
         if (sameHour) {
-          alert('Não é possivel cadastrar horarios duplicados');
+          toast.error('Não é possivel cadastrar horarios duplicados');
           return;
         }
         hours.push(hourDate);
@@ -71,14 +70,11 @@ export default function Dashboard() {
         hours
       );
       getHoursCurrentDate();
+      toast.success('Ponto registrado.');
     } catch (err) {
-      alert(err.message);
+      toast.error(err.message);
     }
   };
-
-  useEffect(() => {
-    getCurrentDateInfo();
-  }, []);
 
   useEffect(() => {
     getHoursCurrentDate();
@@ -91,7 +87,7 @@ export default function Dashboard() {
         <Content>
           <div>
             <h1>Olá, {userInfo.data ? userInfo.data.name : ''}</h1>
-            <h3>{moment(currentDate).format('DD/MM/YYYY')}</h3>
+            <h3>{currentDay}</h3>
           </div>
           <HourContent md={6}>
             {currentDateHours &&

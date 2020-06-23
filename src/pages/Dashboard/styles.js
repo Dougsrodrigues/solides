@@ -17,16 +17,21 @@ export const Content = styled(BootstrapContainer)`
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 300px;
+  height: auto;
   max-width: 650px;
   background: white;
   border-radius: 5px;
 
   > div {
+    margin-top: 12px;
     h1,
     h3 {
       text-align: center;
     }
+  }
+
+  button {
+    margin-bottom: 12px;
   }
 `;
 

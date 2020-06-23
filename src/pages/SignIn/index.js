@@ -3,6 +3,7 @@ import { Link, Redirect } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 import { FiMail, FiLock } from 'react-icons/fi';
 import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 
 import firebase from '../../services/firebase';
 import { Container, FormContent, Background } from './styles';
@@ -29,8 +30,9 @@ export default function SignIn() {
 
       dispatchSignIn({ type: 'SIGN_IN', data });
       setIsLoggedIn(true);
+      toast.success('Logado com sucesso.');
     } catch (err) {
-      alert('deu ruim pae');
+      toast.error('Login/senha inválidos.');
     }
   };
 

@@ -30,9 +30,7 @@ function HeaderComponent() {
               <li>
                 <Link to="/folha">Folha de ponto</Link>
               </li>
-              <li>
-                <Link to="/sobrenos">Sobre nós</Link>
-              </li>
+
               <button
                 onClick={() => {
                   signOut();

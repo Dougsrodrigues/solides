@@ -35,5 +35,6 @@ Input.propTypes = {
   type: PropTypes.string.isRequired,
   placeholder: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
+  error: PropTypes.string,
   icon: PropTypes.oneOfType([React.Component]),
 };

@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 import { FiMail, FiLock, FiUser } from 'react-icons/fi';
+import { toast } from 'react-toastify';
 
 import firebase from '../../services/firebase';
 import { Container, FormContent, Background } from './styles';
@@ -17,9 +18,9 @@ export default function SignUp() {
     try {
       await firebase.register(name, email, password);
 
-      alert('usuario registrado');
+      toast.success('usuario registrado');
     } catch (err) {
-      alert(err.message);
+      toast.error(err.message);
     }
   };
 

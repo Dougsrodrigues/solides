@@ -19,3 +19,6 @@ npm i ou yarn
 ```bash
 npm start ou yarn start
 ```
+
+####Observação:
+A tela de apontamento de hora não tem restrição de horas (chegada na empresa, hora de almoço, saída da empresa), pois penso que um funcionário pode sair e entrar em outras situações.
